@@ -1,25 +1,26 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+//routes import
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
+//1. express 등록
 const app = express();
-//업데이트 예정 - extended 값을 반드시 줘야 한다고 함 true/false 차이점은 찾아본다.
+
+//2. middleware 등록
+//extended 값을 반드시 줘야 한다고 함 true/false 차이점은 찾아본다.
 app.use(bodyParser.urlencoded({extended:false}));  
 
 
-app.use('/add-product', (req, res, next)=>{
-    res.send("<form action='/product' method='POST'><input type='text' name='title'><button type='submit'>Add Product</button> </form>");
-}); 
-
-app.post('/product', (req, res, next)=>{
-    console.log(req.body);
-    const title = req.body.title;
-    res.send('<h1>'+title+"</h1>");
-});
+//3. routes 등록
+app.use(adminRoutes);
+app.use(shopRoutes);
 
 
-app.use('/', (req, res, next)=>{
-    res.send("<h1>Hello from Express</h1>");
-});
+//4. 에러페이지 처리
+app.use((req, res, next)=>{
+    res.status(404).send('<h1>Page Not Found</h1>')
+})
 
 
 app.listen(3000); 
