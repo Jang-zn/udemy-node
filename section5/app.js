@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 
 //3. routes 등록
-app.use(adminRoutes);
+app.use('/admin',adminRoutes);
 app.use(shopRoutes);
 
 
