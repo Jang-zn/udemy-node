@@ -7,6 +7,9 @@ const shopRoutes = require('./routes/shop');
 
 //1. express 등록
 const app = express();
+//1-1 viewEngine 등록
+app.set('view engine', 'pug')
+app.set('views', 'views')
 
 //2. middleware 등록
 //extended 값을 반드시 줘야 한다고 함 true/false 차이점은 찾아본다.
