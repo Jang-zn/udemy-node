@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 //routes import
-const adminRoutes = require('./routes/admin');
+const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 //1. express 등록
@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //3. routes 등록
-app.use('/admin',adminRoutes);
+app.use('/admin',adminData.router);
 app.use(shopRoutes);
 
 
