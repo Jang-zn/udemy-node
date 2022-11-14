@@ -1,15 +1,26 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const expressHandlebars = require('express-handlebars')
+
 //routes import
 const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 //1. express 등록
 const app = express();
+
 //1-1 viewEngine 등록
+
+//handlebar는 내장엔진이 아니라 외부 엔진이라 .engine()으로 세팅해줘야 함
+// app.engine('handlebars', expressHandlebars())
+// app.set('view engine', 'handlebars')
+// app.set('views', 'views')
+
+//pug는 내장 엔진이라 패키지 추가하고 아래처럼 사용 가능
 app.set('view engine', 'pug')
 app.set('views', 'views')
+
 
 //2. middleware 등록
 //extended 값을 반드시 줘야 한다고 함 true/false 차이점은 찾아본다.
