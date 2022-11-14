@@ -10,7 +10,7 @@ router.get('/', (req, res, next)=>{
     // res.sendFile(path.join(rootDir,'views', 'shop.html'));
     //템플릿 파일은 render로 처리한다.
     const products = adminData.products;
-    res.render('shop', {products : products, docTitle : 'Shop'});
+    res.render('shop', {products : products, pageTitle : 'Shop', path:'/'});
 });
 
 
