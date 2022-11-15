@@ -1,5 +1,5 @@
-//DB 안쓰니까 임시로 저장할 배열 생성
-const products = [];
+const fs = require('fs');
+const path = require('../util/path')
 
 
 module.exports = class Product{
@@ -8,12 +8,34 @@ module.exports = class Product{
     }
 
     save(){
-        products.push(this);
+        const p = path+'/data/products.json';
+        fs.readFile(p,(err, data)=>{
+            let products=[];
+            if(!err){
+                products = JSON.parse(data);
+            }
+            products.push(this);
+            fs.writeFile(p,JSON.stringify(products),(err)=>{
+                console.log(err);
+            });
+        });
     }
 
     //static 키워드 사용시 내가 아는 그 static처럼 작동함.
     static fetchAll(){
-        return products
+        const p = path+'/data/products.json';
+        let products=[];
+        fs.readFile(p,(err, data)=>{
+            if(!err){
+                products = JSON.parse(data);
+                return products
+            }
+            fs.writeFile(p,JSON.stringify(products),(err)=>{
+                console.log(err);
+            });
+            return products
+
+        })
     }
 
 }
