@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars')
 
 //routes import
-const adminData = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 //1. express 등록
@@ -30,14 +30,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //3. routes 등록
-app.use('/admin',adminData.router);
+app.use('/admin',adminRoutes);
 app.use(shopRoutes);
 
-
+const commonController = require('./controllers/error.controller');
 //4. 에러페이지 처리
-app.use((req, res, next)=>{
-    res.status(404).render('404',{pageTitle:'File not found'});
-})
+app.use(commonController.return404)
 
 
 app.listen(3000); 
