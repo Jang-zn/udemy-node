@@ -1,7 +1,7 @@
 const Product = require('../models/product');
 
 exports.getAddProduct=(req, res, next)=>{
-    res.render('add-product',{pageTitle:'Add Product', path:'admin/add-product'});
+    res.render('admin/add-product',{pageTitle:'Add Product', path:'admin/add-product'});
 };
 
 exports.postAddProduct=(req, res, next)=>{
@@ -15,6 +15,6 @@ exports.getProducts=(req, res, next)=>{
     // res.sendFile(path.join(rootDir,'views', 'shop.html'));
     //템플릿 파일은 render로 처리한다.
     Product.fetchAll(products=>{
-        res.render('shop', {products : products, pageTitle : 'Shop', path:'/'});
+        res.render('shop/product-list', {products : products, pageTitle : 'Shop', path:'/'});
     });
 };
