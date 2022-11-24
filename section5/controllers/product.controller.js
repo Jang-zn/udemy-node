@@ -24,3 +24,9 @@ exports.getAdminProducts=(req, res, next)=>{
         res.render('admin/products', {products : products, pageTitle : 'Admin Products', path:'admin/products'});
     });
 };
+
+exports.getCart=(req, res, next)=>{
+    Product.fetchAll(products=>{
+        res.render('shop/cart', {products : products, pageTitle : 'Cart', path:'/cart'});
+    });
+};
