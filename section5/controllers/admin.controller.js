@@ -11,22 +11,7 @@ exports.postAddProduct=(req, res, next)=>{
 };
 
 exports.getProducts=(req, res, next)=>{
-    //html은 sendFile로 보내고
-    // res.sendFile(path.join(rootDir,'views', 'shop.html'));
-    //템플릿 파일은 render로 처리한다.
-    Product.fetchAll(products=>{
-        res.render('shop/product-list', {products : products, pageTitle : 'Shop', path:'/'});
-    });
-};
-
-exports.getAdminProducts=(req, res, next)=>{
     Product.fetchAll(products=>{
         res.render('admin/products', {products : products, pageTitle : 'Admin Products', path:'admin/products'});
     });
-};
-
-exports.getCart=(req, res, next)=>{
-    Product.fetchAll(products=>{
-        res.render('shop/cart', {products : products, pageTitle : 'Cart', path:'/cart'});
-    });
-};
+}
