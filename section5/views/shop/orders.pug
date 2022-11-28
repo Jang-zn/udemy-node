@@ -17,10 +17,9 @@ block content
                             h2.product__price $#{product.price}
                             p.product__description #{product.description}
                         .card__actions
-                            a.btn(href="/admin/edit-product/"+product.productId) Edit
-                            form(action="/admin/delete-product/"+product.productId method="POST")
-                                button.btn(type="submit") Delete
+                            form(action="/add-to-cart/"+product.productId method="POST")
+                                button.btn Add to Cart
         else
             .grid
                 header.card__header
-                    h1.product__title No Item
+                    h1.product__title Nothing Here
