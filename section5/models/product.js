@@ -23,6 +23,7 @@ module.exports = class Product{
 
     save(){
         getProductsFromFile(products=>{
+            this.id = Math.random().toString()+Date.now().toString();
             products.push(this);
             fs.writeFile(p,JSON.stringify(products),(err)=>{
                 if(err){
@@ -42,4 +43,10 @@ module.exports = class Product{
         getProductsFromFile(func);
     }
 
+    static findById(id, func){
+        getProductsFromFile(products=>{
+            const product = products.find(p=>p.id===id);
+            func(product);
+        });
+    }
 }
