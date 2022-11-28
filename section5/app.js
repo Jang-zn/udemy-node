@@ -18,7 +18,7 @@ const app = express();
 // app.set('views', 'views')
 
 //pug는 내장 엔진이라 패키지 추가하고 아래처럼 사용 가능
-app.set('view engine', 'pug')
+app.set('view engine', 'ejs')
 app.set('views', 'views')
 
 
