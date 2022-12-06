@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-
+const Cart = require('../models/cart');
 
 exports.getProducts=(req, res, next)=>{
     //html은 sendFile로 보내고
@@ -25,6 +25,9 @@ exports.getCart=(req, res, next)=>{
 
 exports.addCart=(req, res, next)=>{
     const productId = req.body.productId;
+    Product.findById(productId, (product)=>{
+        Cart.addProduct(productId,product.price)
+    });
     res.redirect('/cart');
 };
 

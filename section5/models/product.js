@@ -23,7 +23,7 @@ module.exports = class Product{
 
     save(){
         getProductsFromFile(products=>{
-            this.id = Math.random().toString()+Date.now().toString();
+            this.id = Math.random().toString();
             products.push(this);
             fs.writeFile(p,JSON.stringify(products),(err)=>{
                 if(err){
