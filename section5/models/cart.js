@@ -28,7 +28,8 @@ module.exports = class Cart{
             updatedProduct = {id:id, quantity:1};
             cart.products = [...cart.products, updatedProduct]
           }
-          cart.totalPrice = cart.totalPrice+productPrice;
+          //String으로 처리되지 않도록 productPrice 앞에 + 붙여줌
+          cart.totalPrice = cart.totalPrice+ +productPrice;
           //저장
           fs.writeFile(p, JSON.stringify(cart),(err)=>{
             console.log(err);
