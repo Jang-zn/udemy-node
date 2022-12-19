@@ -5,7 +5,6 @@ exports.getAddProduct=(req, res, next)=>{
 };
 
 exports.postAddProduct=(req, res, next)=>{
-    console.log(req.body)
     const product = new Product(null,req.body.title, req.body.imageUrl, req.body.description, req.body.price);
     product.save();
     res.redirect("/")
@@ -30,18 +29,21 @@ exports.getEditProduct=(req, res, next)=>{
             editing : editMode,
             product : product
         });   
-    });
-
-    
+    });  
 };
 
 exports.postEditProduct=(req, res, next)=>{
-    console.log(req.body)
     const product = new Product(req.body.id, req.body.title, req.body.imageUrl, req.body.description, req.body.price);
     product.save();
-    res.redirect("/admin")
+    res.redirect("/admin/products")
 };
 
+exports.deleteProduct=(req, res, next)=>{
+    console.log(req.params.productId);
+    const productId = req.params.productId;
+    Product.deleteById(productId);
+    res.redirect("/admin/products")
+};
 
 exports.getProducts=(req, res, next)=>{
     Product.fetchAll(prods=>{

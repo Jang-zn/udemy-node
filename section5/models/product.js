@@ -43,7 +43,22 @@ module.exports = class Product{
                 });
             }
         });
-    }
+    };
+
+    static deleteById(productId){
+        getProductsFromFile(products=>{
+            const existingProductIndex = products.findIndex(prod => prod.id===this.id);
+            // productId가 같은 항목 제외하고 나머지 배열 반환받음
+            const updatedProducts = products.filter(prod=>prod.id!==productId);
+            // 파일에 새 배열 저장
+            fs.writeFile(p,JSON.stringify(updatedProducts),(err)=>{
+                //에러가 나지 않으면 카트에서도 삭제
+                if(!err){
+                    console.log(err);
+                }
+            });
+        });
+    };
 
     //static 키워드 사용시 내가 아는 그 static처럼 작동함.
     //이거 async await 왜 안되는지 모르겠는데.. 암튼 callback함수를 파라미터로 넣고
