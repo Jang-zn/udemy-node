@@ -6,7 +6,7 @@ exports.getAddProduct=(req, res, next)=>{
 
 exports.postAddProduct=(req, res, next)=>{
     console.log(req.body)
-    const product = new Product(req.body.title, req.body.imageUrl, req.body.description, req.body.price);
+    const product = new Product(null,req.body.title, req.body.imageUrl, req.body.description, req.body.price);
     product.save();
     res.redirect("/")
 };
@@ -29,7 +29,7 @@ exports.getEditProduct=(req, res, next)=>{
             path : 'admin/edit-product',
             editing : editMode,
             product : product
-        });    
+        });   
     });
 
     
@@ -37,9 +37,9 @@ exports.getEditProduct=(req, res, next)=>{
 
 exports.postEditProduct=(req, res, next)=>{
     console.log(req.body)
-    const product = new Product(req.body.title, req.body.imageUrl, req.body.description, req.body.price);
+    const product = new Product(req.body.id, req.body.title, req.body.imageUrl, req.body.description, req.body.price);
     product.save();
-    res.redirect("/")
+    res.redirect("/admin")
 };
 
 

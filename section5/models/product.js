@@ -14,7 +14,8 @@ const getProductsFromFile = (func)=>{
 }
 
 module.exports = class Product{
-    constructor(title, imageUrl, description, price){
+    constructor(id, title, imageUrl, description, price){
+        this.id=id;
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -23,16 +24,25 @@ module.exports = class Product{
 
     save(){
         getProductsFromFile(products=>{
-            this.id = Math.random().toString();
-            products.push(this);
-            fs.writeFile(p,JSON.stringify(products),(err)=>{
-                if(err){
-                    console.log(err);
-                }
-                
-            });
+            if(this.id){
+                const existingProductIndex = products.findIndex(prod => prod.id===this.id);
+                const updatedProducts = [...products];
+                updatedProducts[existingProductIndex] = this;
+                fs.writeFile(p,JSON.stringify(updatedProducts),(err)=>{
+                    if(err){
+                        console.log(err);
+                    }
+                });
+            }else{
+                this.id = Math.random().toString();
+                products.push(this);
+                fs.writeFile(p,JSON.stringify(products),(err)=>{
+                    if(err){
+                        console.log(err);
+                    }    
+                });
+            }
         });
-
     }
 
     //static 키워드 사용시 내가 아는 그 static처럼 작동함.
