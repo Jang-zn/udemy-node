@@ -35,6 +35,36 @@ module.exports = class Cart{
             console.log(err);
           });
         });
-    }
+    };
+
+    static deleteProduct(id, productPrice){
+      fs.readFile(p, (err, fileContent)=>{
+        if(err){
+          return;
+        }
+        const updatedCart = {...JSON.parse(fileContent)};
+        const deletedProduct = updatedCart.products.find(prod=>id===prod.id);
+        if(!deletedProduct){
+          return;
+        }
+        const deletedProductQuantity = deletedProduct.quantity;
+        updatedCart.products = updatedCart.products.filter(prod=>id!==prod.id);
+        updatedCart.totalPrice = fileContent.totalPrice - productPrice*deletedProductQuantity;
+        fs.writeFile(p, JSON.stringify(updatedCart),(err)=>{
+          console.log(err);
+        });
+      })
+    };
+
+    static getCart(callback){
+      fs.readFile(p, (err, fileContent)=>{
+          const cart = JSON.parse(fileContent);
+          if(err){
+            callback(null);
+          }else{
+            callback(cart);
+          }
+        });
+    };
 
 }

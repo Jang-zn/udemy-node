@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('../util/path')
 const p = path+'/data/products.json';
+const Cart = require('./cart');
 
 //helper function
 const getProductsFromFile = (func)=>{
@@ -47,14 +48,14 @@ module.exports = class Product{
 
     static deleteById(productId){
         getProductsFromFile(products=>{
-            const existingProductIndex = products.findIndex(prod => prod.id===this.id);
+            const product = products.find(prod=>productId===prod.id);
             // productId가 같은 항목 제외하고 나머지 배열 반환받음
             const updatedProducts = products.filter(prod=>prod.id!==productId);
             // 파일에 새 배열 저장
             fs.writeFile(p,JSON.stringify(updatedProducts),(err)=>{
                 //에러가 나지 않으면 카트에서도 삭제
                 if(!err){
-                    console.log(err);
+                    Cart.deleteProduct(product.id, product.price);
                 }
             });
         });
