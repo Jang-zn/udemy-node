@@ -1,8 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const expressHandlebars = require('express-handlebars')
-
+const db = require('./util/database');
 //routes import
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -32,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //3. routes 등록
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
+
 
 const commonController = require('./controllers/error.controller');
 //4. 에러페이지 처리
