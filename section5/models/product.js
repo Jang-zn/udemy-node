@@ -1,23 +1,13 @@
-const Cart = require('./cart');
+const Sequelize = require('sequelize');
+const sequelize = require('../util/database');
+const database = require('../util/database');
 
-module.exports = class Product{
-    constructor(id, title, imageUrl, description, price){
-        this.id=id;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.price = +price;
-    };
-
-    static deleteById(productId){
-        
-    };
-
-    static fetchAll(func){
-    
-    }
-
-    static findById(id, func){
-    
-    }
-}
+const Product = sequelize.define('product',{
+    id:{
+        type:Sequelize.INTEGER,
+        autoIncrement:true,
+        primaryKey:true,
+        allowNull:false,
+    },
+    title:
+})
