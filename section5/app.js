@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const db = require('./util/database');
+const sequelize = require('./util/database');
 //routes import
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -37,5 +37,11 @@ const commonController = require('./controllers/error.controller');
 //4. 에러페이지 처리
 app.use(commonController.return404)
 
+//모델과 데이터베이스 동기화 - 실무에선 쓰다가 좆될수 있으니 주의
+sequelize.sync().then(result=>{
+    console.log(result);
+    app.listen(3000); 
+}).catch(err=>{
+    console.error(err);
+});
 
-app.listen(3000); 
