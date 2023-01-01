@@ -39,7 +39,7 @@ app.use(commonController.return404)
 
 //모델과 데이터베이스 동기화 - 실무에선 쓰다가 좆될수 있으니 주의
 sequelize.sync().then(result=>{
-    console.log(result);
+    console.log('Database Connection Success');
     app.listen(3000); 
 }).catch(err=>{
     console.error(err);

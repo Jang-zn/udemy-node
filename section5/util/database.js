@@ -6,7 +6,7 @@ const sequelize = new Sequelize(
     'wkddndud1!',
     {
         dialect : 'mysql',
-        host : 'localhost'
+        host : '127.0.0.1'
     }
 );
 
