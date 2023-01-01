@@ -16,10 +16,10 @@ exports.postAddProduct=(req, res, next)=>{
         imageUrl : imageUrl
     }).then(result=>{
         console.log('Created Product');
+        res.redirect("/")
     }).catch(err=>{
         console.log(err)
     });
-    res.redirect("/")
 };
 
 exports.getEditProduct=(req, res, next)=>{
@@ -29,7 +29,8 @@ exports.getEditProduct=(req, res, next)=>{
         return res.redirect('/');
     }
     const productId = req.params.productId;
-    Product.findById(productId, product =>{
+    Product.findByPk(productId)
+    .then(product =>{
         //제품이 있는지 없는지 검사
         if(!product){
             //보통은 PRODUCT_NOT_FOUND 같은 Error 던져줌
@@ -41,23 +42,53 @@ exports.getEditProduct=(req, res, next)=>{
             editing : editMode,
             product : product
         });   
+    })
+    .catch(err=>{
+        console.log(err);
     });  
 };
 
 exports.postEditProduct=(req, res, next)=>{
-    const product = new Product(req.body.id, req.body.title, req.body.imageUrl, req.body.description, req.body.price);
-    product.save();
-    res.redirect("/admin/products")
+    const productId = req.body.id;
+    Product.findByPk(productId)
+    .then(product =>{
+        product.title = req.body.title, 
+        product.imageUrl = req.body.imageUrl, 
+        product.description = req.body.description,
+        product.price = req.body.price
+        return product.save();
+    })
+    //save의 promise 처리 로직이 들어가는 then
+    .then(result=>{
+        console.log('Updated Product');
+        //여기 redirect 넣으면 err 발생시 페이지 이동이 없음. 이거 처리는 나중에 배운다.
+        //아님 알싸 코드 참고.
+        res.redirect("/admin/products")
+    })
+    .catch(err=>{
+        console.log(err);
+    });
 };
 
 exports.deleteProduct=(req, res, next)=>{
     const productId = req.params.productId;
-    Product.deleteById(productId);
-    res.redirect("/admin/products")
+    Product.findByPk(productId)
+    .then(product=>{
+        return product.destroy();
+    })
+    .then(result=>{
+        console.log('Delete Product');
+        res.redirect("/admin/products")
+    })
+    .catch(err=>{console.log(err)});
 };
 
 exports.getProducts=(req, res, next)=>{
-    Product.fetchAll(prods=>{
+    Product.findAll()
+    .then(prods=>{
         res.render('admin/products', {prods : prods, pageTitle : 'Admin Products', path:'admin/products'});
+    })
+    .catch(err=>{
+        console.log(err);
     });
 }
