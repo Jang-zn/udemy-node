@@ -5,8 +5,20 @@ exports.getAddProduct=(req, res, next)=>{
 };
 
 exports.postAddProduct=(req, res, next)=>{
-    const product = new Product(null,req.body.title, req.body.imageUrl, req.body.description, req.body.price);
-    product.save();
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl;
+    const description = req.body.description;
+    const price = req.body.price;
+    Product.create({
+        title : title,
+        price : price,
+        description : description,
+        imageUrl : imageUrl
+    }).then(result=>{
+        console.log('Created Product');
+    }).catch(err=>{
+        console.log(err)
+    });
     res.redirect("/")
 };
 
