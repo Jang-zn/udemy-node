@@ -5,6 +5,7 @@ const sequelize = require('./util/database');
 const Product = require('./models/product');
 const Cart = require('./models/cart');
 const User = require('./models/user');
+const CartItem = require('./models/cartItem')
 
 
 //routes import
@@ -56,9 +57,15 @@ app.use(commonController.return404)
 Product.belongsTo(User, {constraints : true, onDelete : 'CASCADE'});
 User.hasMany(Product);
 
+User.hasOne(Cart);
+Cart.belongsTo(User);
+
+Cart.belongsToMany(Product,{through : CartItem});
+Product.belongsToMany(Cart,{through : CartItem});
+
 //모델과 데이터베이스 동기화 - 실무에선 쓰다가 좆될수 있으니 주의
 // sync({force:true})해주면 DB 덮어씌움
-sequelize.sync()
+sequelize.sync({force : true})
 .then(result=>{
     console.log('Database Connection Success');
     return User.findByPk(1);
