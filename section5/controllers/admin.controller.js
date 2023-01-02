@@ -9,7 +9,15 @@ exports.postAddProduct=(req, res, next)=>{
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const price = req.body.price;
-    Product.create({
+    //관계설정이 되어있는 sequelize 모델이라서 createProduct()같은 메소드를 사용할 수 있다
+    // Product.create({
+    //     title : title,
+    //     price : price,
+    //     description : description,
+    //     imageUrl : imageUrl
+    //이러면 알아서 foreignKey 지정돼서 들어간다
+    //자세한건 docs보면 되는데.. 관계지정을 안하잖아...
+    req.user.createProduct({
         title : title,
         price : price,
         description : description,
@@ -29,8 +37,11 @@ exports.getEditProduct=(req, res, next)=>{
         return res.redirect('/');
     }
     const productId = req.params.productId;
-    Product.findByPk(productId)
-    .then(product =>{
+    //여기도 똑같이 가능
+    req.user.getProducts({where:{id:productId}})
+    // Product.findByPk(productId)
+    .then(products =>{
+        const product = products[0];
         //제품이 있는지 없는지 검사
         if(!product){
             //보통은 PRODUCT_NOT_FOUND 같은 Error 던져줌
@@ -84,7 +95,7 @@ exports.deleteProduct=(req, res, next)=>{
 };
 
 exports.getProducts=(req, res, next)=>{
-    Product.findAll()
+    req.user.getProducts()
     .then(prods=>{
         res.render('admin/products', {prods : prods, pageTitle : 'Admin Products', path:'admin/products'});
     })
