@@ -2,6 +2,11 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const sequelize = require('./util/database');
+const Product = require('./models/product');
+const Cart = require('./models/cart');
+const User = require('./models/user');
+
+
 //routes import
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -27,6 +32,15 @@ app.use(bodyParser.urlencoded({extended:false}));
 //정적 파일 접근을 위해 express.static 사용
 app.use(express.static(path.join(__dirname, 'public')));  
 
+//더미유저 호출용 미들웨어 - sequelize 객체임
+app.use((req,res,next)=>{
+    User.findByPk(1)
+    .then(user=>{
+        req.user = user;
+        next();
+    })
+    .catch(err=>{console.log(err)});
+});
 
 //3. routes 등록
 app.use('/admin',adminRoutes);
@@ -37,11 +51,28 @@ const commonController = require('./controllers/error.controller');
 //4. 에러페이지 처리
 app.use(commonController.return404)
 
+
+//Model 간의 관계 정의 --> 실제로는 관계정의하면 확장, 수정시 좆될일이 많아서 정의 안한다고 한다..
+Product.belongsTo(User, {constraints : true, onDelete : 'CASCADE'});
+User.hasMany(Product);
+
 //모델과 데이터베이스 동기화 - 실무에선 쓰다가 좆될수 있으니 주의
-sequelize.sync().then(result=>{
+// sync({force:true})해주면 DB 덮어씌움
+sequelize.sync()
+.then(result=>{
     console.log('Database Connection Success');
-    app.listen(3000); 
-}).catch(err=>{
+    return User.findByPk(1);
+})
+//더미유저 추가
+.then(user=>{
+    if(!user){
+        return User.create({name:'Test', email : 'test@test.com'});
+    }
+    return user;
+}).then(user=>{
+    app.listen(3000);
+})
+.catch(err=>{
     console.error(err);
 });
 
