@@ -1,5 +1,6 @@
 const Product = require('../models/product');
 const Cart = require('../models/cart');
+const e = require('express');
 
 exports.getProducts=(req, res, next)=>{
     //html은 sendFile로 보내고
@@ -23,26 +24,44 @@ exports.getProductById=(req, res, next)=>{
 };
 
 exports.getCart=(req, res, next)=>{
-    Cart.getCart(cart=>{
-        Product.fetchAll(products=>{
-            const cartProduct = [];
-            for(product of products){
-                const cartProductData = cart.products.find(prod=>prod.id===product.id);
-                if(cartProductData){
-                    cartProduct.push({productData : product, quantity : cartProductData.quantity});
-                }
-            }
-            res.render('shop/cart', {prods : cartProduct, pageTitle : 'Cart', path:'/cart'})
-        })
+    req.user.getCart()
+    .then(cart=>{
+        return cart.getProducts();
     })
+    .then(products=>{
+        return res.render('shop/cart', {prods : products, pageTitle : 'Cart', path:'/cart'});
+    })
+    .catch(err=>console.log(err));
 };
 
 exports.addCart=(req, res, next)=>{
     const productId = req.body.productId;
-    Product.findById(productId, (product)=>{
-        Cart.addProduct(productId,product.price)
-    });
-    res.redirect('/cart');
+    let cartData;
+    let newQuantity = 1;
+    req.user.getCart()
+    .then(cart=>{
+        cartData = cart;
+        return cart.getProducts({where : {id : productId}});
+    })
+    .then(products=>{
+        let product;
+        if(products.length>0){
+            product = products[0];
+        }
+        if(product){
+            const cartQuantity = product.cartItem.quantity;
+            newQuantity = cartQuantity+1;
+            return product;
+        }
+        return Product.findByPk(productId)
+    })
+    .then(product=>{
+        cartData.addProduct(product, {through : {quantity : newQuantity}})
+    })
+    .then(()=>{
+        res.redirect('/cart');
+    })
+    .catch(err=>console.log(err));
 };
 
 exports.deleteCartItem=(req, res, next)=>{
