@@ -65,7 +65,7 @@ Product.belongsToMany(Cart,{through : CartItem});
 
 //모델과 데이터베이스 동기화 - 실무에선 쓰다가 좆될수 있으니 주의
 // sync({force:true})해주면 DB 덮어씌움
-sequelize.sync({force : true})
+sequelize.sync()
 .then(result=>{
     console.log('Database Connection Success');
     return User.findByPk(1);
