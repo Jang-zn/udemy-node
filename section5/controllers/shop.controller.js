@@ -71,7 +71,7 @@ exports.deleteCartItem=(req, res, next)=>{
         //호출한 cart는 belongsToMany 관계로 product와 연결됨 - through cartItem
         return cart.getProducts({where:{id:productId}});
     })
-    //
+    //asd
     .then(products=>{
         //호출한 product의 cart와의 관계를 끊기 위해 cartItem 삭제
         const product = products[0];
