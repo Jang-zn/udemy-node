@@ -101,7 +101,7 @@ exports.getCheckout = (req,res,next)=>{
 exports.getOrders=(req, res, next)=>{
     req.user.getOrders()
     .then(orders=>{
-        return res.render('shop/orders', {prods : orders, pageTitle : 'Order', path:'/orders'});
+        return res.render('shop/orders', {orders : orders, pageTitle : 'Order', path:'/orders'});
     })
     .catch(err=>console.log(err));
 };
