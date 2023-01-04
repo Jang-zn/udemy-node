@@ -6,7 +6,8 @@ const Product = require('./models/product');
 const Cart = require('./models/cart');
 const User = require('./models/user');
 const CartItem = require('./models/cartItem')
-
+const Order = require('./models/order');
+const OrderItem = require('./models/orderItem');
 
 //routes import
 const adminRoutes = require('./routes/admin');
@@ -49,6 +50,7 @@ app.use(shopRoutes);
 
 
 const commonController = require('./controllers/error.controller');
+
 //4. 에러페이지 처리
 app.use(commonController.return404)
 
@@ -62,6 +64,10 @@ Cart.belongsTo(User);
 
 Cart.belongsToMany(Product,{through : CartItem});
 Product.belongsToMany(Cart,{through : CartItem});
+
+User.hasMany(Order);
+Order.belongsTo(User);
+Order.belongsToMany(Product, {through : OrderItem})
 
 //모델과 데이터베이스 동기화 - 실무에선 쓰다가 좆될수 있으니 주의
 // sync({force:true})해주면 DB 덮어씌움
