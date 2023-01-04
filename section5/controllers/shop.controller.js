@@ -1,5 +1,4 @@
 const Product = require('../models/product');
-const Cart = require('../models/cart');
 const e = require('express');
 
 exports.getProducts=(req, res, next)=>{
@@ -100,7 +99,42 @@ exports.getCheckout = (req,res,next)=>{
 };
 
 exports.getOrders=(req, res, next)=>{
-    Product.fetchAll(prods=>{
-        res.render('shop/orders', {prods : prods, pageTitle : 'Your Orders', path:'/orders'});
-    });
+    req.user.getOrders()
+    .then(orders=>{
+        return res.render('shop/orders', {prods : orders, pageTitle : 'Order', path:'/orders'});
+    })
+    .catch(err=>console.log(err));
 };
+
+//cart의 모든 cartItem을 order로 보낸다.
+exports.addOrder = (req,res,next)=>{
+    let cartData;
+
+    req.user.getCart()
+    .then(cart=>{
+        cartData = cart;
+        return cart.getProducts();
+    })
+    .then(products=>{
+        return req.user.createOrder()
+        .then(order=>{
+            //belongsToMany인 경우 through 되는 형태(orderItem)에 맞춰서 addXXXs 에다가 list 째로 넣어버릴 수 있음
+            order.addProducts(
+                products.map(product=>{
+                    product.orderItem = {quantity : product.cartItem.quantity};
+                    return product;
+                    }
+                )
+            )
+        })
+        .then(result=>{
+            //cart 비워줌
+            return cartData.setProducts(null);
+        })
+        .then(result=>{
+            res.redirect('/orders');
+        })
+        .catch(err=>console.log(err));
+    })
+    .catch(err=>console.log(err));
+}
