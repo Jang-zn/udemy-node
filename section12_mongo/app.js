@@ -1,17 +1,11 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const sequelize = require('./util/database');
-const Product = require('./models/product');
-const Cart = require('./models/cart');
-const User = require('./models/user');
-const CartItem = require('./models/cartItem')
-const Order = require('./models/order');
-const OrderItem = require('./models/orderItem');
+const mongoClient = require('./util/database');
 
-//routes import
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+// //routes import
+// const adminRoutes = require('./routes/admin');
+// const shopRoutes = require('./routes/shop');
 
 //1. express 등록
 const app = express();
@@ -36,17 +30,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //더미유저 호출용 미들웨어 - sequelize 객체임
 app.use((req,res,next)=>{
-    User.findByPk(1)
-    .then(user=>{
-        req.user = user;
-        next();
-    })
-    .catch(err=>{console.log(err)});
+    // User.findByPk(1)
+    // .then(user=>{
+    //     req.user = user;
+    //     next();
+    // })
+    // .catch(err=>{console.log(err)});
 });
 
 //3. routes 등록
-app.use('/admin',adminRoutes);
-app.use(shopRoutes);
+// app.use('/admin',adminRoutes);
+// app.use(shopRoutes);
 
 
 const commonController = require('./controllers/error.controller');
@@ -55,40 +49,10 @@ const commonController = require('./controllers/error.controller');
 app.use(commonController.return404)
 
 
-//Model 간의 관계 정의 --> 실제로는 관계정의하면 확장, 수정시 좆될일이 많아서 정의 안한다고 한다..
-Product.belongsTo(User, {constraints : true, onDelete : 'CASCADE'});
-User.hasMany(Product);
-
-User.hasOne(Cart);
-Cart.belongsTo(User);
-
-Cart.belongsToMany(Product,{through : CartItem});
-Product.belongsToMany(Cart,{through : CartItem});
-
-User.hasMany(Order);
-Order.belongsTo(User);
-Order.belongsToMany(Product, {through : OrderItem})
-
-//모델과 데이터베이스 동기화 - 실무에선 쓰다가 좆될수 있으니 주의
-// sync({force:true})해주면 DB 덮어씌움
-sequelize.sync()
-// sequelize.sync({force : true})
-.then(result=>{
-    console.log('Database Connection Success');
-    return User.findByPk(1);
-})
-//더미유저 추가
-.then(user=>{
-    if(!user){
-        return User.create({name:'Test', email : 'test@test.com'});
-    }
-    return user;
-}).then(user=>{
-    return user.createCart();
-}).then(cart=>{
+mongoClient(client=>{
     app.listen(3000);
 })
-.catch(err=>{
-    console.error(err);
-});
+
+
+
 
