@@ -28,7 +28,7 @@ exports.getEditProduct=(req, res, next)=>{
     const productId = req.params.productId;
     //여기도 똑같이 가능
     req.user.getProducts({where:{id:productId}})
-    // Product.findByPk(productId)
+    // Product.findById(productId)
     .then(products =>{
         const product = products[0];
         //제품이 있는지 없는지 검사
@@ -50,7 +50,7 @@ exports.getEditProduct=(req, res, next)=>{
 
 exports.postEditProduct=(req, res, next)=>{
     const productId = req.body.id;
-    Product.findByPk(productId)
+    Product.findById(productId)
     .then(product =>{
         product.title = req.body.title, 
         product.imageUrl = req.body.imageUrl, 
@@ -72,7 +72,7 @@ exports.postEditProduct=(req, res, next)=>{
 
 exports.deleteProduct=(req, res, next)=>{
     const productId = req.params.productId;
-    Product.findByPk(productId)
+    Product.findById(productId)
     .then(product=>{
         return product.destroy();
     })

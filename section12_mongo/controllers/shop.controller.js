@@ -14,8 +14,8 @@ exports.getProducts=(req, res, next)=>{
 
 exports.getProductById=(req, res, next)=>{
     const productId = req.params.productId;
-    //seqeulize 버전 올라가서 findById가 아니라 findByPk를 사용함.
-    Product.findByPk(productId)
+    //seqeulize 버전 올라가서 findById가 아니라 findById를 사용함.
+    Product.findById(productId)
     .then(prod =>{
         res.render('shop/product-detail',{product:prod, pageTitle:prod.title, path:'/products'})
     })
@@ -52,7 +52,7 @@ exports.addCart=(req, res, next)=>{
             newQuantity = cartQuantity+1;
             return product;
         }
-        return Product.findByPk(productId)
+        return Product.findById(productId)
     })
     .then(product=>{
         cartData.addProduct(product, {through : {quantity : newQuantity}})
