@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const mongoClient = require('./util/database').mongoClient;
 
 // //routes import
-// const adminRoutes = require('./routes/admin');
-// const shopRoutes = require('./routes/shop');
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
 //1. express 등록
 const app = express();
@@ -39,9 +39,9 @@ app.use((req,res,next)=>{
     next();
 });
 
-//3. routes 등록
-// app.use('/admin',adminRoutes);
-// app.use(shopRoutes);
+// 3. routes 등록
+app.use('/admin',adminRoutes);
+app.use(shopRoutes);
 
 
 const commonController = require('./controllers/error.controller');

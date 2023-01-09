@@ -5,7 +5,7 @@ exports.getProducts=(req, res, next)=>{
     //html은 sendFile로 보내고
     // res.sendFile(path.join(rootDir,'views', 'shop.html'));
     //템플릿 파일은 render로 처리한다.
- Product.findAll().then(prods=>{
+ Product.fetchAll().then(prods=>{
         res.render('shop/product-list', {prods : prods, pageTitle : 'All Products', path:'/products'});
     }).catch(err=>{
         console.log(err);
@@ -84,7 +84,7 @@ exports.deleteCartItem=(req, res, next)=>{
 
 
 exports.getIndex = (req,res,next)=>{
-    Product.findAll().then(prods=>{
+    Product.fetchAll().then(prods=>{
         res.render('shop/index', {prods : prods, pageTitle : 'Shop', path:'/'});
     }).catch(err=>{
         console.log(err);
