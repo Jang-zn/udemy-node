@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const mongoClient = require('./util/database');
+const mongoClient = require('./util/database').mongoClient;
 
 // //routes import
 // const adminRoutes = require('./routes/admin');
@@ -36,6 +36,7 @@ app.use((req,res,next)=>{
     //     next();
     // })
     // .catch(err=>{console.log(err)});
+    next();
 });
 
 //3. routes 등록
@@ -49,7 +50,7 @@ const commonController = require('./controllers/error.controller');
 app.use(commonController.return404)
 
 
-mongoClient(client=>{
+mongoClient(()=>{
     app.listen(3000);
 })
 
