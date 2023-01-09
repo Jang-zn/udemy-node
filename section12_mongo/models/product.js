@@ -1,3 +1,4 @@
+const mongodb = require('mongodb');
 const getDB = require('../util/database').getDB;
 
 class Product {
@@ -36,7 +37,9 @@ class Product {
     static findById(productId){
         const db = getDB();
         //.toArray()가 아니라 .next()로 반환된 다음 document === 마지막 document 를 가져온다.
-        return db.collection('products').find({_id:productId}).next()
+        return db.collection('products')
+        //id 비교시 mongoDb의 ObjectId에 값을 넣어서 비교해줘야 한다.
+        .find({_id : new mongodb.ObjectId(productId)}).next()
         .then(product=>{
             console.log(product);
             return product;

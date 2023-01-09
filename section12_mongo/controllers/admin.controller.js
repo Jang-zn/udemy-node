@@ -27,10 +27,9 @@ exports.getEditProduct=(req, res, next)=>{
     }
     const productId = req.params.productId;
     //여기도 똑같이 가능
-    req.user.getProducts({where:{id:productId}})
+    Product.findById(productId)
     // Product.findById(productId)
-    .then(products =>{
-        const product = products[0];
+    .then(product =>{
         //제품이 있는지 없는지 검사
         if(!product){
             //보통은 PRODUCT_NOT_FOUND 같은 Error 던져줌
@@ -84,7 +83,7 @@ exports.deleteProduct=(req, res, next)=>{
 };
 
 exports.getProducts=(req, res, next)=>{
-    req.user.getProducts()
+    Product.fetchAll()
     .then(prods=>{
         res.render('admin/products', {prods : prods, pageTitle : 'Admin Products', path:'admin/products'});
     })
