@@ -1,3 +1,4 @@
+const mongodb = require('mongodb')
 const Product = require('../models/product');
 
 exports.getAddProduct=(req, res, next)=>{
@@ -49,14 +50,14 @@ exports.getEditProduct=(req, res, next)=>{
 
 exports.postEditProduct=(req, res, next)=>{
     const productId = req.body.id;
-    Product.findById(productId)
-    .then(product =>{
-        product.title = req.body.title, 
-        product.imageUrl = req.body.imageUrl, 
-        product.description = req.body.description,
-        product.price = req.body.price
-        return product.save();
-    })
+    const product = new Product(
+        req.body.title, 
+        req.body.price, 
+        req.body.description,
+        req.body.imageUrl, 
+        new mongodb.ObjectId(productId));
+        
+    product.save()
     //save의 promise 처리 로직이 들어가는 then
     .then(result=>{
         console.log('Updated Product');
