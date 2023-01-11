@@ -19,7 +19,7 @@ class User {
             user = db.collection('users').insertOne(this);
         }
         user.then(result=>{
-            // console.log()
+            // console.log(req.user);
         })
         .catch(err=>{console.log(err)});
     }

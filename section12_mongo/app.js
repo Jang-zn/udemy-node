@@ -33,7 +33,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req,res,next)=>{
     User.findById('63bed192e5dbb55bae6cee33')
     .then(user=>{
-        req.user = user;
+        //findById로 반환되는 user는 단순한 js object라서 class의 함수를 포함하고 있지 않음
+        // req.user = user;
+        // 아래처럼 class 형태로 새로 만들어서 저장해준다....-> 어차피 더미데이터기도 하고 인증관련해선 나중에 할거임
+        req.user = new User(user.name, user.email, user.cart, user._id);
         next();
     })
     .catch(err=>{console.log(err)});

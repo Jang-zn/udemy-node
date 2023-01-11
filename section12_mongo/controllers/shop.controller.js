@@ -33,21 +33,16 @@ exports.getCart=(req, res, next)=>{
 
 exports.addCart=(req, res, next)=>{
     const productId = req.body.productId;
-    let product;
-    Product.findById(productId).then(prod=>{
-        product = prod;
-    }).catch(err=>{
+    Product.findById(productId)
+    .then(prod=>{
+        return req.user.addToCart(prod)
+    })
+    .then(result=>{
+        res.redirect('/cart'); 
+    })
+    .catch(err=>{
         console.log(err);
     })
-
-    User.findById(req.user._id)
-    .then(user=>{
-        return user.addToCart(product)
-    })
-    .then(()=>{
-        res.redirect('/cart');
-    })
-    .catch(err=>console.log(err));
 };
 
 exports.deleteCartItem=(req, res, next)=>{
