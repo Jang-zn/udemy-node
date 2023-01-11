@@ -7,14 +7,15 @@ class Product {
         this.price = price,
         this.description = description,
         this.imageUrl = imageUrl,
-        this._id = id
+        //_id 받을때 생성자에서 ObjectId로 바꿔주면 보내줄때 그냥 string으로 보내도 처리된다.
+        this._id = id?new mongodb.ObjectId(id):null
     }
 
     save(){
         const db = getDB();
         let prod;
         if(this._id){
-            prod = db.collection('products').updateOne({_id:new mongodb.ObjectId(this._id)},{$set:this});
+            prod = db.collection('products').updateOne({_id:this._id},{$set:this});
         }else{
             prod = db.collection('products').insertOne(this);
         }
@@ -53,6 +54,15 @@ class Product {
         .catch(err=>{
             console.log(err);
         })
+    }
+
+    static deleteById(productId){
+        const db = getDB();
+        return db.collection('products').deleteOne({_id: new mongodb.ObjectId(productId)})
+        .then(result=>{
+            console.log('Delete');
+        })
+        .catch(err=>{console.log(err)})
     }
 }
 

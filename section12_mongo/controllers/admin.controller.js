@@ -55,8 +55,8 @@ exports.postEditProduct=(req, res, next)=>{
         req.body.price, 
         req.body.description,
         req.body.imageUrl, 
-        new mongodb.ObjectId(productId));
-        
+        productId);
+
     product.save()
     //save의 promise 처리 로직이 들어가는 then
     .then(result=>{
@@ -72,10 +72,7 @@ exports.postEditProduct=(req, res, next)=>{
 
 exports.deleteProduct=(req, res, next)=>{
     const productId = req.params.productId;
-    Product.findById(productId)
-    .then(product=>{
-        return product.destroy();
-    })
+    Product.deleteById(productId)
     .then(result=>{
         console.log('Delete Product');
         res.redirect("/admin/products")
