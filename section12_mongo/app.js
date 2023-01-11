@@ -37,7 +37,8 @@ app.use((req,res,next)=>{
         next();
     })
     .catch(err=>{console.log(err)});
-    next();
+    //next()가 중복되면 [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client 에러 발생함
+    //next()
 });
 
 // 3. routes 등록

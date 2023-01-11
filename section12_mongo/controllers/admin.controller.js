@@ -10,7 +10,7 @@ exports.postAddProduct=(req, res, next)=>{
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const price = req.body.price;
-    const product = new Product(title, price, description, imageUrl);
+    const product = new Product(title, price, description, imageUrl, null, req.user._id);
     product.save()
     .then(result=>{
         console.log('Created Product');
@@ -55,7 +55,9 @@ exports.postEditProduct=(req, res, next)=>{
         req.body.price, 
         req.body.description,
         req.body.imageUrl, 
-        productId);
+        productId,
+        req.user._id
+        );
 
     product.save()
     //save의 promise 처리 로직이 들어가는 then

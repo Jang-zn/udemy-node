@@ -2,13 +2,15 @@ const mongodb = require('mongodb');
 const getDB = require('../util/database').getDB;
 
 class Product {
-    constructor(title, price, description, imageUrl, id){
+    constructor(title, price, description, imageUrl, id, userId){
         this.title = title,
         this.price = price,
         this.description = description,
         this.imageUrl = imageUrl,
         //_id 받을때 생성자에서 ObjectId로 바꿔주면 보내줄때 그냥 string으로 보내도 처리된다.
-        this._id = id?new mongodb.ObjectId(id):null
+        this._id = id?new mongodb.ObjectId(id):null,
+        //user와의 관계 종속성을 위해 product에 userId 추가
+        this.userId = userId
     }
 
     save(){
