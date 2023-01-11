@@ -26,7 +26,7 @@ app.set('views', 'views')
 //2. middleware 등록
 //extended 값을 반드시 줘야 한다고 함 true/false 차이점은 찾아본다.
 app.use(bodyParser.urlencoded({extended:false}));  
-//정적 파일 접근을 위해 express.static 사용
+//정적 파일 접근을 위해 express.static
 app.use(express.static(path.join(__dirname, 'public')));  
 
 //더미유저 호출용 미들웨어

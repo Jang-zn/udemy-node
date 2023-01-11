@@ -1,5 +1,6 @@
 const Product = require('../models/product');
-const e = require('express');
+const User = require('../models/user');
+
 
 exports.getProducts=(req, res, next)=>{
     //html은 sendFile로 보내고
@@ -23,39 +24,25 @@ exports.getProductById=(req, res, next)=>{
 };
 
 exports.getCart=(req, res, next)=>{
-    req.user.getCart()
-    .then(cart=>{
-        return cart.getProducts();
-    })
-    .then(products=>{
-        return res.render('shop/cart', {prods : products, pageTitle : 'Cart', path:'/cart'});
+    User.findById(req.user._id)
+    .then(user=>{
+        return res.render('shop/cart', {prods : user.cart.items, pageTitle : 'Cart', path:'/cart'});
     })
     .catch(err=>console.log(err));
 };
 
 exports.addCart=(req, res, next)=>{
     const productId = req.body.productId;
-    let cartData;
-    let newQuantity = 1;
-    req.user.getCart()
-    .then(cart=>{
-        cartData = cart;
-        return cart.getProducts({where : {id : productId}});
+    let product;
+    Product.findById(productId).then(prod=>{
+        product = prod;
+    }).catch(err=>{
+        console.log(err);
     })
-    .then(products=>{
-        let product;
-        if(products.length>0){
-            product = products[0];
-        }
-        if(product){
-            const cartQuantity = product.cartItem.quantity;
-            newQuantity = cartQuantity+1;
-            return product;
-        }
-        return Product.findById(productId)
-    })
-    .then(product=>{
-        cartData.addProduct(product, {through : {quantity : newQuantity}})
+
+    User.findById(req.user._id)
+    .then(user=>{
+        return user.addToCart(product)
     })
     .then(()=>{
         res.redirect('/cart');
