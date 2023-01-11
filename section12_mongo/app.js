@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoClient = require('./util/database').mongoClient;
+const User = require('./models/user');
 
 // //routes import
 const adminRoutes = require('./routes/admin');
@@ -28,14 +29,14 @@ app.use(bodyParser.urlencoded({extended:false}));
 //정적 파일 접근을 위해 express.static 사용
 app.use(express.static(path.join(__dirname, 'public')));  
 
-//더미유저 호출용 미들웨어 - sequelize 객체임
+//더미유저 호출용 미들웨어
 app.use((req,res,next)=>{
-    // User.findByPk(1)
-    // .then(user=>{
-    //     req.user = user;
-    //     next();
-    // })
-    // .catch(err=>{console.log(err)});
+    User.findById('63bed192e5dbb55bae6cee33')
+    .then(user=>{
+        req.user = user;
+        next();
+    })
+    .catch(err=>{console.log(err)});
     next();
 });
 
