@@ -41,7 +41,7 @@ class User {
         return db.collection('users').updateOne({_id:this._id}, {$set:this});
     }
 
-    deleteToCart(productId){
+    deleteFromCart(productId){
         //TODO
     }
 

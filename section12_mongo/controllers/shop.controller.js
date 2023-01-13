@@ -46,7 +46,7 @@ exports.addCart=(req, res, next)=>{
 
 exports.deleteCartItem=(req, res, next)=>{
     const productId = req.body.productId;
-    req.user.deleteToCart(productId)
+    req.user.deleteFromCart(productId)
     .then(result=>{
         res.redirect('/cart');
     })
