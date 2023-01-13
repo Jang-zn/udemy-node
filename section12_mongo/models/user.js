@@ -41,6 +41,10 @@ class User {
         return db.collection('users').updateOne({_id:this._id}, {$set:this});
     }
 
+    deleteToCart(productId){
+        //TODO
+    }
+
     static findById(userId){
         const db = getDB();
         return db.collection('users').find({_id: new mongodb.ObjectId(userId)}).next()

@@ -15,7 +15,6 @@ exports.getProducts=(req, res, next)=>{
 
 exports.getProductById=(req, res, next)=>{
     const productId = req.params.productId;
-    //seqeulize 버전 올라가서 findById가 아니라 findById를 사용함.
     Product.findById(productId)
     .then(prod =>{
         res.render('shop/product-detail',{product:prod, pageTitle:prod.title, path:'/products'})
@@ -47,17 +46,7 @@ exports.addCart=(req, res, next)=>{
 
 exports.deleteCartItem=(req, res, next)=>{
     const productId = req.body.productId;
-    //1. sequelize 객체인 user의 hasOne 관계로부터 getCart함수 호출
-    req.user.getCart().then(cart=>{
-        //호출한 cart는 belongsToMany 관계로 product와 연결됨 - through cartItem
-        return cart.getProducts({where:{id:productId}});
-    })
-    //asd
-    .then(products=>{
-        //호출한 product의 cart와의 관계를 끊기 위해 cartItem 삭제
-        const product = products[0];
-        return product.cartItem.destroy();
-    })
+    req.user.deleteToCart(productId)
     .then(result=>{
         res.redirect('/cart');
     })
