@@ -32,7 +32,6 @@ class User {
             return cp._id===product._id;
         });
         //없으면 -1 반환
-        console.log(cartProductIndex);
         if(cartProductIndex<0){
             this.cart.items.push({...product, quantity:1});
         }else{
@@ -42,7 +41,12 @@ class User {
     }
 
     deleteFromCart(productId){
-        //TODO
+        const db = getDB();
+        //중복체크
+        const cartProductIndex = this.cart.items.findIndex(cp=>{
+            return cp._id===new mongodb.ObjectId(productId);
+        });
+        
     }
 
     static findById(userId){
