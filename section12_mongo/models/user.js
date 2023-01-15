@@ -29,11 +29,11 @@ class User {
         const db = getDB();
         //중복체크
         const cartProductIndex = this.cart.items.findIndex(cp=>{
-            return cp._id===product._id;
+            return cp.productId===product._id;
         });
         //없으면 -1 반환
         if(cartProductIndex<0){
-            this.cart.items.push({...product, quantity:1});
+            this.cart.items.push({productId:new mongodb.ObjectId(product.productId), quantity:1});
         }else{
             this.cart.items[cartProductIndex].quantity = this.cart.items[cartProductIndex].quantity+1
         }
@@ -46,7 +46,7 @@ class User {
         const cartProductIndex = this.cart.items.findIndex(cp=>{
             return cp._id===new mongodb.ObjectId(productId);
         });
-        
+
     }
 
     static findById(userId){
