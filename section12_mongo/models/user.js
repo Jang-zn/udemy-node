@@ -29,7 +29,7 @@ class User {
         const db = getDB();
         //중복체크
         const cartProductIndex = this.cart.items.findIndex(cp=>{
-            return cp.productId===product._id;
+            return cp.productId.toString()===product._id.toString();
         });
         //없으면 -1 반환
         if(cartProductIndex<0){
