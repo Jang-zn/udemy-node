@@ -33,7 +33,7 @@ class User {
         });
         //없으면 -1 반환
         if(cartProductIndex<0){
-            this.cart.items.push({productId:new mongodb.ObjectId(product.productId), quantity:1});
+            this.cart.items.push({productId:new mongodb.ObjectId(product._id), quantity:1});
         }else{
             this.cart.items[cartProductIndex].quantity = this.cart.items[cartProductIndex].quantity+1
         }
