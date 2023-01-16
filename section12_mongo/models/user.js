@@ -46,6 +46,7 @@ class User {
         const cartProductIndex = this.cart.items.findIndex(cp=>{
             return cp._id===new mongodb.ObjectId(productId);
         });
+        
 
     }
 
