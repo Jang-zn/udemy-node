@@ -69,6 +69,16 @@ class User {
         .catch(err=>{console.log(err)});
     }
 
+    addOrder(){
+        const db = getDB();
+        return db.collection('orders').insertOne(this.cart)
+        .then(result=>{
+            this.cart = {itmes : []};
+            return db.collection('users').updateOne({_id:this._id},{$set:{cart : {items : []}}});
+        })
+        .catch(err=>console.log(err));
+    }
+
     static findById(userId){
         const db = getDB();
         return db.collection('users').find({_id: new mongodb.ObjectId(userId)}).next()
