@@ -70,9 +70,7 @@ exports.getCheckout = (req,res,next)=>{
 };
 
 exports.getOrders=(req, res, next)=>{
-    //include : ['products'] 해줘야 객체 안에 through되는 products property가 추가된다.
-    //--> eager loading..?
-    req.user.getOrders({include : ['products']})
+    req.user.getOrders()
     .then(orders=>{
         return res.render('shop/orders', {orders : orders, pageTitle : 'Order', path:'/orders'});
     })
@@ -81,7 +79,6 @@ exports.getOrders=(req, res, next)=>{
 
 //cart의 모든 cartItem을 order로 보낸다.
 exports.addOrder = (req,res,next)=>{
-    let cartData;
     req.user.addOrder()
     .then(result=>{
         res.redirect('/orders');

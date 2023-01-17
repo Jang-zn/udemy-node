@@ -71,7 +71,7 @@ class User {
 
     addOrder(){
         const db = getDB();
-        this.getCart()
+        return this.getCart()
         .then(products=>{
             const order = {
                 items : products,
@@ -87,6 +87,13 @@ class User {
             return db.collection('users').updateOne({_id:this._id},{$set:{cart : {items : []}}});
         })
         .catch(err=>console.log(err));
+    }
+
+    getOrders(){
+        const db = getDB();
+        return db.collection('orders')
+        .find({'user._id':this._id}).toArray()
+        .catch(err=>console.log(err))
     }
 
     static findById(userId){
