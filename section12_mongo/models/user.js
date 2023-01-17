@@ -53,7 +53,8 @@ class User {
         const productIds = this.cart.items.map(i=>{
             return i.productId;
         })
-        return db.collection('products')
+        return db
+        .collection('products')
         .find({_id:{$in:productIds}})
         .toArray()
         .then(products=>{
@@ -64,7 +65,7 @@ class User {
                 }
             })
         })
-        .cathc(err=>{console.log(err)});
+        .catch(err=>{console.log(err)});
     }
 
     static findById(userId){
