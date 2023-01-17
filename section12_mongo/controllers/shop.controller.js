@@ -23,9 +23,9 @@ exports.getProductById=(req, res, next)=>{
 };
 
 exports.getCart=(req, res, next)=>{
-    User.findById(req.user._id)
-    .then(user=>{
-        return res.render('shop/cart', {prods : user.cart.items, pageTitle : 'Cart', path:'/cart'});
+    req.user.getCart()
+    .then(products=>{
+        return res.render('shop/cart', {prods : products, pageTitle : 'Cart', path:'/cart'});
     })
     .catch(err=>console.log(err));
 };
