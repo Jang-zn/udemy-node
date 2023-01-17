@@ -41,11 +41,12 @@ class User {
     }
 
     deleteFromCart(productId){
+        const updatedCartItems = this.cart.items.filter(item=>{
+            return productId !== item.productId.toString();
+        })
         const db = getDB();
-        //중복체크
-        const cartProductIndex = this.cart.items.findIndex(cp=>{
-            return cp._id===new mongodb.ObjectId(productId);
-        });
+        return db.collection('users').updateOne({_id:this._id},{$set:{cart : {items : updatedCartItems}}});
+        
     }
 
     getCart(){
